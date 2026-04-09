@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>システム導入支援・比較検討コンサルティング</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Serif+JP:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0f0f0f;
+      --ink-light: #3a3a3a;
+      --paper: #f5f3ef;
+      --paper-dark: #ede9e3;
+      --accent: #1a3a2a;
+      --accent-mid: #2d5c42;
+      --accent-light: #4a8a65;
+      --rule: rgba(15,15,15,0.12);
+      --rule-accent: rgba(26,58,42,0.3);
+      --gold: #8a7040;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      line-height: 1.8;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 3rem;
+      background: rgba(245,243,239,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      font-weight: 300;
+      color: var(--ink-light);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-light);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--paper);
+      background: var(--accent);
+      border: none;
+      padding: 0.65rem 1.4rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.25s;
+    }
+
+    .nav-cta:hover { background: var(--accent-mid); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 4rem 5rem 5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent-light);
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 4.5vw, 4.2rem);
+      font-weight: 300;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 300;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+      font-weight: 300;
+      color: var(--ink-light);
+      margin-bottom: 2.5rem;
+      line-height: 1.35;
+    }
+
+    .hero-body {
+      font-size: 0.9rem;
+      line-height: 2;
+      color: var(--ink-light);
+      max-width: 38ch;
+      margin-bottom: 3rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .btn-primary {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--paper);
+      background: var(--accent);
+      border: none;
+      padding: 1rem 2.2rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-mid);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: color 0.25s;
+    }
+
+    .btn-ghost::after {
+      content: '→';
+      transition: transform 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--accent); }
+    .btn-ghost:hover::after { transform: translateX(3px); }
+
+    .hero-right {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--paper-dark);
+      overflow: hidden;
+    }
+
+    .hero-visual {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-visual svg {
+      width: 90%;
+      height: 90%;
+      opacity: 0.08;
+    }
+
+    .hero-stat-block {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      width: 320px;
+    }
+
+    .hero-stat {
+      background: var(--paper-dark);
+      padding: 2rem 2.5rem;
+    }
+
+    .hero-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 5rem;
+      margin: 0;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    .divider-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      white-space: nowrap;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 7rem 5rem;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: block;
+      width: 1.5rem;
+      height: 1px;
+      background: var(--accent-light);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3vw, 3rem);
+      font-weight: 300;
+      line-height: 1.25;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    /* ── PAIN SECTION ── */
+    #pain {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    #pain .section-label { color: rgba(245,243,239,0.4); }
+    #pain .section-label::before { background: rgba(245,243,239,0.4); }
+
+    #pain .section-title { color: var(--paper); }
+
+    #pain .section-title em { color: #7dbf9a; }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(245,243,239,0.08);
+      margin-top: 4rem;
+    }
+
+    .pain-item {
+      background: var(--ink);
+      padding: 2.5rem;
+      position: relative;
+      transition: background 0.3s;
+    }
+
+    .pain-item:hover { background: #1a1a1a; }
+
+    .pain-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 300;
+      color: rgba(245,243,239,0.06);
+      line-height: 1;
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+    }
+
+    .pain-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      opacity: 0.7;
+    }
+
+    .pain-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--paper);
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .pain-body {
+      font-size: 0.82rem;
+      line-height: 1.9;
+      color: rgba(245,243,239,0.55);
+    }
+
+    /* ── SERVICE SECTION ── */
+    #service {
+      background: var(--paper);
+    }
+
+    .service-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: end;
+      margin-bottom: 5rem;
+    }
+
+    .service-intro-body {
+      font-size: 0.88rem;
+      line-height: 2.1;
+      color: var(--ink-light);
+    }
+
+    .service-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .service-item {
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: start;
+      gap: 2rem;
+      padding: 2.5rem;
+      transition: background 0.25s;
+      cursor: default;
+    }
+
+    .service-item:hover { background: var(--paper-dark); }
+
+    .service-item-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent-light);
+      padding-top: 0.35rem;
+    }
+
+    .service-item-content {}
+
+    .service-item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .service-item-body {
+      font-size: 0.83rem;
+      line-height: 1.9;
+      color: var(--ink-light);
+    }
+
+    .service-item-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--rule-accent);
+      padding: 0.3rem 0.7rem;
+      white-space: nowrap;
+      margin-top: 0.3rem;
+    }
+
+    /* ── PROCESS SECTION ── */
+    #process {
+      background: var(--paper-dark);
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 2.5rem;
+      left: calc(10% + 1.5rem);
+      right: calc(10% + 1.5rem);
+      height: 1px;
+      background: var(--rule-accent);
+    }
+
+    .process-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 1rem;
+      position: relative;
+    }
+
+    .step-circle {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      background: var(--paper-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .step-body {
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--ink-light);
+    }
+
+    /* ── INDUSTRIES ── */
+    #industries {
+      background: var(--paper);
+    }
+
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      margin-top: 4rem;
+    }
+
+    .industry-card {
+      background: var(--paper);
+      padding: 2rem;
+      text-align: center;
+      transition: background 0.25s;
+    }
+
+    .industry-card:hover { background: var(--paper-dark); }
+
+    .industry-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .industry-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--ink);
+    }
+
+    /* ── WHY US ── */
+    #why {
+      background: var(--accent);
+      color: var(--paper);
+    }
+
+    #why .section-label { color: rgba(245,243,239,0.45); }
+    #why .section-label::before { background: rgba(245,243,239,0.45); }
+    #why .section-title { color: var(--paper); }
+    #why .section-title em { color: #a8d8bc; }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 4rem;
+    }
+
+    .why-item {
+      border-top: 1px solid rgba(245,243,239,0.2);
+      padding-top: 2rem;
+    }
+
+    .why-item-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--paper);
+      margin-bottom: 0.8rem;
+      line-height: 1.3;
+    }
+
+    .why-item-body {
+      font-size: 0.83rem;
+      line-height: 2;
+      color: rgba(245,243,239,0.65);
+    }
+
+    /* ── CTA SECTION ── */
+    #contact {
+      background: var(--paper-dark);
+      text-align: center;
+    }
+
+    .cta-box {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .cta-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .cta-body {
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--ink-light);
+      margin-bottom: 3rem;
+    }
+
+    .cta-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      color: var(--ink);
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.85rem;
+      padding: 0.85rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-submit {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--paper);
+      background: var(--accent);
+      border: none;
+      padding: 1.1rem;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.25s;
+      margin-top: 0.5rem;
+    }
+
+    .form-submit:hover { background: var(--accent-mid); }
+
+    .cta-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-light);
+      margin-top: 1rem;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      padding: 3rem 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: rgba(245,243,239,0.7);
+    }
+
+    .footer-note {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: rgba(245,243,239,0.3);
+    }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up:nth-child(1) { animation-delay: 0.1s; }
+    .fade-up:nth-child(2) { animation-delay: 0.25s; }
+    .fade-up:nth-child(3) { animation-delay: 0.4s; }
+    .fade-up:nth-child(4) { animation-delay: 0.55s; }
+
+    /* Intersection observer targets */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 4rem 1.5rem 3rem; }
+      .hero-right { min-height: 280px; }
+      section { padding: 4rem 1.5rem; }
+      .divider { padding: 0 1.5rem; }
+      .pain-grid { grid-template-columns: 1fr; }
+      .service-intro { grid-template-columns: 1fr; gap: 2rem; }
+      .process-steps { grid-template-columns: 1fr; }
+      .process-steps::before { display: none; }
+      .process-step { flex-direction: row; text-align: left; gap: 1.5rem; align-items: flex-start; }
+      .step-circle { flex-shrink: 0; }
+      .industries-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">System <span>Advisory</span></a>
+    <ul class="nav-links">
+      <li><a href="#pain">課題</a></li>
+      <li><a href="#service">サービス</a></li>
+      <li><a href="#process">進め方</a></li>
+      <li><a href="#why">強み</a></li>
+    </ul>
+    <a class="nav-cta" href="#contact">無料相談</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow fade-up">System Advisory</p>
+      <h1 class="hero-title fade-up">
+        最適なシステムを、<br><em>迷わず選ぶ</em>ために。
+      </h1>
+      <p class="hero-subtitle fade-up">システム導入支援・比較検討コンサルティング</p>
+      <p class="hero-body fade-up">
+        「どのシステムが自社に合うか分からない」「ベンダーの提案を正しく評価できない」——そのような課題を、中立的な立場で解決します。要件整理から導入後定着まで、一気通貫でご支援します。
+      </p>
+      <div class="hero-actions fade-up">
+        <a class="btn-primary" href="#contact">無料相談を予約する</a>
+        <a class="btn-ghost" href="#service">サービス詳細</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-visual">
+        <!-- Abstract geometric grid SVG -->
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <g stroke="#1a3a2a" stroke-width="0.5" fill="none">
+            <line x1="0" y1="80" x2="400" y2="80"/>
+            <line x1="0" y1="160" x2="400" y2="160"/>
+            <line x1="0" y1="240" x2="400" y2="240"/>
+            <line x1="0" y1="320" x2="400" y2="320"/>
+            <line x1="80" y1="0" x2="80" y2="400"/>
+            <line x1="160" y1="0" x2="160" y2="400"/>
+            <line x1="240" y1="0" x2="240" y2="400"/>
+            <line x1="320" y1="0" x2="320" y2="400"/>
+            <circle cx="200" cy="200" r="120"/>
+            <circle cx="200" cy="200" r="80"/>
+            <circle cx="200" cy="200" r="40"/>
+            <line x1="80" y1="80" x2="320" y2="320"/>
+            <line x1="320" y1="80" x2="80" y2="320"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hero-stat-block">
+        <div class="hero-stat">
+          <div class="hero-stat-num">100+</div>
+          <div class="hero-stat-label">比較検討システム実績</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">中立</div>
+          <div class="hero-stat-label">特定ベンダーに依存しない提案</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-text">課題</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- PAIN -->
+  <section id="pain">
+    <p class="section-label">Common Challenges</p>
+    <h2 class="section-title">こんなお悩みは<br><em>ありませんか？</em></h2>
+    <div class="pain-grid">
+      <div class="pain-item reveal">
+        <span class="pain-num">01</span>
+        <div class="pain-icon">🔍</div>
+        <p class="pain-title">候補が多すぎて<br>比較しきれない</p>
+        <p class="pain-body">ERPひとつとっても数十種類。機能・費用・サポート体制の違いを正確に把握し、自社要件に照らして評価するには専門知識が必要です。</p>
+      </div>
+      <div class="pain-item reveal">
+        <span class="pain-num">02</span>
+        <div class="pain-icon">🤝</div>
+        <p class="pain-title">ベンダーの言葉を<br>鵜呑みにしてしまう</p>
+        <p class="pain-body">提案側は当然、自社製品を推します。客観的な評価軸を持たずに選定を進めると、導入後に「こんなはずでは」という事態が起こりがちです。</p>
+      </div>
+      <div class="pain-item reveal">
+        <span class="pain-num">03</span>
+        <div class="pain-icon">📋</div>
+        <p class="pain-title">要件定義が<br>うまくできない</p>
+        <p class="pain-body">「何が必要か」を言語化できないまま選定を始めると、後から仕様変更や追加費用が発生します。要件整理こそ、成否の鍵です。</p>
+      </div>
+      <div class="pain-item reveal">
+        <span class="pain-num">04</span>
+        <div class="pain-icon">⚙️</div>
+        <p class="pain-title">導入後の定着が<br>うまくいかない</p>
+        <p class="pain-body">システムは入れて終わりではありません。運用フローの設計・スタッフへの浸透・継続的な改善がなければ、投資効果は得られません。</p>
+      </div>
+      <div class="pain-item reveal">
+        <span class="pain-num">05</span>
+        <div class="pain-icon">💰</div>
+        <p class="pain-title">コストの妥当性が<br>判断できない</p>
+        <p class="pain-body">見積もりの内訳が不透明で、どこが適正でどこが高いのか分からない。価格交渉の材料がないまま、言い値で契約しているケースも少なくありません。</p>
+      </div>
+      <div class="pain-item reveal">
+        <span class="pain-num">06</span>
+        <div class="pain-icon">🏃</div>
+        <p class="pain-title">社内リソースが<br>足りない</p>
+        <p class="pain-body">IT担当者が不在、あるいは兼務で手が回らない。外部の専門家に伴走してもらいながら、内製化できる体制を整えたい。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-text">サービス</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- SERVICE -->
+  <section id="service">
+    <div class="service-intro">
+      <div>
+        <p class="section-label">Our Services</p>
+        <h2 class="section-title">提供する<br><em>サービス</em></h2>
+      </div>
+      <p class="service-intro-body">
+        不動産管理・アクチュアリー・データ分析・教育と多領域にわたる実務知識をベースに、システム選定・導入において中立的かつ実践的な支援を提供します。特定ベンダーとの利益相反がないため、お客様の立場に立った提案が可能です。
+      </p>
+    </div>
+
+    <div class="service-list">
+      <div class="service-item reveal">
+        <span class="service-item-num">01</span>
+        <div class="service-item-content">
+          <p class="service-item-title">現状分析・要件定義支援</p>
+          <p class="service-item-body">業務フローのヒアリングと可視化を通じて、「本当に必要なシステム要件」を明確化。曖昧なニーズを具体的な選定基準へと落とし込みます。</p>
+        </div>
+        <span class="service-item-tag">Foundation</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-item-num">02</span>
+        <div class="service-item-content">
+          <p class="service-item-title">システム比較・評価レポート作成</p>
+          <p class="service-item-body">候補製品を独自の評価フレームで比較し、機能・費用・サポート・拡張性を多角的に分析したレポートを提供。意思決定の根拠を明確にします。</p>
+        </div>
+        <span class="service-item-tag">Core</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-item-num">03</span>
+        <div class="service-item-content">
+          <p class="service-item-title">ベンダー選定・交渉同席支援</p>
+          <p class="service-item-body">RFP（提案依頼書）の作成から、提案評価・デモ立会い・価格交渉まで伴走。お客様が対等な立場でベンダーと向き合えるよう支援します。</p>
+        </div>
+        <span class="service-item-tag">Advisory</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-item-num">04</span>
+        <div class="service-item-content">
+          <p class="service-item-title">導入プロジェクト管理（PMO）</p>
+          <p class="service-item-body">導入スケジュール策定・ベンダー進捗管理・リスク管理を代行。社内リソースが限られた企業でも、プロジェクトを安全に進行させます。</p>
+        </div>
+        <span class="service-item-tag">PMO</span>
+      </div>
+      <div class="service-item reveal">
+        <span class="service-item-num">05</span>
+        <div class="service-item-content">
+          <p class="service-item-title">運用定着・改善支援</p>
+          <p class="service-item-body">稼働後の運用フロー設計・スタッフ研修・KPIモニタリングを支援。システムを「使われる仕組み」として定着させ、投資効果を最大化します。</p>
+        </div>
+        <span class="service-item-tag">Operations</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-text">進め方</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <p class="section-label">Our Process</p>
+    <h2 class="section-title">ご支援の<em>流れ</em></h2>
+
+    <div class="process-steps">
+      <div class="process-step reveal">
+        <div class="step-circle">01</div>
+        <div>
+          <p class="step-label">無料相談</p>
+          <p class="step-body">現状の課題や検討背景をヒアリング。ご支援範囲を明確にします。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-circle">02</div>
+        <div>
+          <p class="step-label">現状分析</p>
+          <p class="step-body">業務フロー・組織体制・予算感をベースに要件を整理します。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-circle">03</div>
+        <div>
+          <p class="step-label">比較・評価</p>
+          <p class="step-body">候補システムを多角的に評価し、レポートとしてご提示します。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-circle">04</div>
+        <div>
+          <p class="step-label">選定・導入</p>
+          <p class="step-body">ベンダー交渉・契約・プロジェクト管理を伴走支援します。</p>
+        </div>
+      </div>
+      <div class="process-step reveal">
+        <div class="step-circle">05</div>
+        <div>
+          <p class="step-label">定着・改善</p>
+          <p class="step-body">稼働後の運用定着と継続的な改善をサポートします。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRIES -->
+  <section id="industries">
+    <p class="section-label">Industries</p>
+    <h2 class="section-title">対応<em>業種・領域</em></h2>
+    <div class="industries-grid">
+      <div class="industry-card reveal">
+        <span class="industry-icon">🏢</span>
+        <p class="industry-name">不動産管理・運用</p>
+      </div>
+      <div class="industry-card reveal">
+        <span class="industry-icon">📊</span>
+        <p class="industry-name">資産管理・アクチュアリー</p>
+      </div>
+      <div class="industry-card reveal">
+        <span class="industry-icon">🎓</span>
+        <p class="industry-name">教育・研修機関</p>
+      </div>
+      <div class="industry-card reveal">
+        <span class="industry-icon">🔬</span>
+        <p class="industry-name">データ分析・研究</p>
+      </div>
+      <div class="industry-card reveal">
+        <span class="industry-icon">⚖️</span>
+        <p class="industry-name">士業・専門職事務所</p>
+      </div>
+      <div class="industry-card reveal">
+        <span class="industry-icon">🏬</span>
+        <p class="industry-name">中小企業全般</p>
+      </div>
+      <div class="industry-card reveal">
+        <span class="industry-icon">🌐</span>
+        <p class="industry-name">Webサービス・SaaS企業</p>
+      </div>
+      <div class="industry-card reveal">
+        <span class="industry-icon">🏥</span>
+        <p class="industry-name">医療・福祉</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <p class="section-label">Why Us</p>
+    <h2 class="section-title">私を選ぶ<br><em>強み。</em></h2>
+    <div class="why-grid">
+      <div class="why-item reveal">
+        <p class="why-item-title">完全中立のアドバイザリー</p>
+        <p class="why-item-body">特定ベンダーから紹介料や手数料を受け取りません。お客様の利益だけを起点に、純粋に最適なシステムを提案します。利益相反のない助言が私たちの原則です。</p>
+      </div>
+      <div class="why-item reveal">
+        <p class="why-item-title">多領域の実務知識</p>
+        <p class="why-item-body">不動産・資産運用・データ分析・教育と複数の事業領域を持つ当社だからこそ、業界横断的な視点でシステムを評価できます。「使う側の目線」を常に持っています。</p>
+      </div>
+      <div class="why-item reveal">
+        <p class="why-item-title">エンジニアリングと経営の両視点</p>
+        <p class="why-item-body">技術仕様の評価と経営・コスト判断を同一チームで行えます。「技術的に正しい」だけでなく「ビジネスとして最適」な選択を導きます。</p>
+      </div>
+      <div class="why-item reveal">
+        <p class="why-item-title">小回りの利く体制</p>
+        <p class="why-item-body">大手コンサルのように契約期間・費用が硬直していません。スポット相談から長期伴走まで、お客様の状況に合わせた柔軟なご支援形態を選んでいただけます。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / CONTACT -->
+  <section id="contact">
+    <div class="cta-box">
+      <p class="section-label" style="justify-content:center;">Contact</p>
+      <h2 class="cta-title">まず、<em>話してみませんか。</em></h2>
+      <p class="cta-body">初回相談は無料です。現在抱えているお悩みやご状況を教えていただくだけで構いません。最適なご支援の形をご提案します。</p>
+
+      <form class="cta-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="name">お名前 *</label>
+            <input class="form-input" type="text" id="name" placeholder="山田 太郎" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="company">会社名</label>
+            <input class="form-input" type="text" id="company" placeholder="株式会社〇〇">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label" for="email">メールアドレス *</label>
+            <input class="form-input" type="email" id="email" placeholder="example@company.co.jp" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="interest">ご関心のサービス</label>
+            <select class="form-select" id="interest">
+              <option value="">選択してください</option>
+              <option>現状分析・要件定義支援</option>
+              <option>システム比較・評価レポート</option>
+              <option>ベンダー選定・交渉支援</option>
+              <option>導入PMO</option>
+              <option>運用定着・改善支援</option>
+              <option>まだ決まっていない</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label" for="message">ご相談内容（任意）</label>
+          <textarea class="form-textarea" id="message" placeholder="現在検討しているシステムや、お困りの状況をご自由にお書きください。"></textarea>
+        </div>
+        <button class="form-submit" type="submit">無料相談を申し込む →</button>
+        <p class="cta-note">送信後、1営業日以内にご連絡いたします。</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-logo">システム導入支援・比較検討コンサルティング</p>
+    <p class="footer-note">© 2025 All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Intersection Observer for reveal animations
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          // Stagger within groups
+          const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+          const index = Array.from(siblings).indexOf(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Form submit handler (placeholder)
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = '送信しました ✓';
+      btn.style.background = '#2d5c42';
+      btn.disabled = true;
+    }
+
+    // Nav scroll effect
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.boxShadow = window.scrollY > 20
+        ? '0 1px 20px rgba(15,15,15,0.08)'
+        : 'none';
+    });
+  </script>
+</body>
+</html>
