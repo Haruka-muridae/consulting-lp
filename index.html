@@ -1183,6 +1183,7 @@
       try {
         await fetch('https://script.google.com/macros/s/AKfycbzAT1NQwtZ6iZ_KCs2vdSgyMNhZvyfmYCWik2EIlITg-i9bLjDDLgxroQChdq_y5jbl/exec', {
           method: 'POST',
+          mode: 'no-cors',   // ← これを追加
           body: JSON.stringify(data)
         });
         btn.textContent = '送信しました ✓';
